@@ -7,7 +7,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="relative bg-black h-svh flex justify-center overflow-x-hidden">{children}</body>
     </html>
   );
 }
