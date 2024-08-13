@@ -5,9 +5,6 @@ const md = 768
 const lg = 1280
 
 export let threeReady = false
-setTimeout(() => {
-  console.log(threeReady)
-}, 500)
 
 export const setupModel = () => {
   const canvas: HTMLCanvasElement | undefined = document.querySelector(
@@ -82,4 +79,5 @@ export const setupModel = () => {
   canvas.classList.add('fadeIn')
   console.log('Model should have been set up!')
   threeReady = true
+  handleResize()
 }

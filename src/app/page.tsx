@@ -5,6 +5,7 @@ import styles from './custom.module.css'
 import { useEffect, useState } from 'react'
 import { setupModel, threeReady } from '../components/thheedleModel'
 import { roboto, robotoHeavy, robotoThin } from './fonts'
+import NavBar from '@/components/NavBar'
 
 export default function Home() {
   const [canvasVisible, setCanvasVisible] = useState(false)
@@ -43,7 +44,7 @@ export default function Home() {
             </strong>
           </h1>
         </div>
-        <div className="relative w-full h-8 bg-orange-500 hidden md:block"></div>
+        <NavBar></NavBar>
       </div>
     </>
   )
