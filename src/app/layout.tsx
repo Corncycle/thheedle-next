@@ -1,13 +1,15 @@
-import "./globals.css";
+import './globals.css'
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en">
-      <body className="relative bg-black h-svh flex justify-center overflow-x-hidden">{children}</body>
+      <body className="relative bg-black h-svh flex justify-center overflow-x-hidden">
+        {children}
+      </body>
     </html>
-  );
+  )
 }
