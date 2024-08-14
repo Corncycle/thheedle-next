@@ -1,4 +1,4 @@
-import { roboto } from '@/app/fonts'
+import { robotoHeavy } from '@/app/fonts'
 import Link from 'next/link'
 
 export default function NavItem({
@@ -11,11 +11,11 @@ export default function NavItem({
   isSelected: boolean
 }) {
   return (
-    <li className={`${roboto.className} text-xl text-white`}>
+    <li className={`${robotoHeavy.className} text-2xl text-white`}>
       <Link
-        className={`text-white ${
+        className={`relative text-white ${
           isSelected ? 'underline' : 'no-underline'
-        } underline-offset-4 decoration-2`}
+        } underline-offset-4 decoration-2 hover:text-glow`}
         href={href}
       >
         {name}

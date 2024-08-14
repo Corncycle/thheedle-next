@@ -1,3 +1,98 @@
+/**
+ *            █
+ *        -0.5,2.0
+ *     █           \
+ * -1.5,1.5             \
+ *          \               █
+ *               \       1.5,1.0
+ *                   █      |
+ *                0.5,0.5   |
+ *            █      |      █
+ *        -0.5,0.0\  |  /1.5,0.0
+ *            |      █
+ *            |   0.5,-0.5
+ *            |      |
+ *            |      █
+ *            |  /0.5,-1.5
+ *            █
+ *        -0.5,-2.0
+ */
+
+export interface Region {
+  above: { m: number; b: number }[]
+  below: { m: number; b: number }[]
+  right: { x: number }[]
+  left: { x: number }[]
+}
+
+export interface LabeledPoint {
+  x: number
+  y: number
+  z: number
+  region: 'top' | 'mid' | 'bot'
+}
+
+export interface Point {
+  x: number
+  y: number
+}
+
+export const topRegion: Region = {
+  above: [{ m: -0.5, b: 0.75 }],
+  below: [
+    { m: 0.5, b: 2.25 },
+    { m: -0.5, b: 1.75 },
+  ],
+  right: [],
+  left: [{ x: 1.5 }],
+}
+
+export const midRegion: Region = {
+  above: [{ m: 0.5, b: -0.75 }],
+  below: [{ m: -0.5, b: 0.75 }],
+  right: [{ x: 0.5 }],
+  left: [],
+}
+
+export const botRegion: Region = {
+  above: [{ m: 0.5, b: -1.75 }],
+  below: [{ m: -0.5, b: -0.25 }],
+  right: [{ x: -0.5 }],
+  left: [{ x: 0.5 }],
+}
+
+export function regionContainsPoint(region: Region, p: Point) {
+  for (const a of region.above) {
+    if (p.y < a.m * p.x + a.b) {
+      return false
+    }
+  }
+  for (const b of region.below) {
+    if (p.y > b.m * p.x + b.b) {
+      return false
+    }
+  }
+  for (const r of region.right) {
+    if (p.x < r.x) {
+      return false
+    }
+  }
+  for (const l of region.left) {
+    if (p.x > l.x) {
+      return false
+    }
+  }
+  return true
+}
+
+function modelContainsPoint(p: Point) {
+  return (
+    regionContainsPoint(topRegion, p) ||
+    regionContainsPoint(midRegion, p) ||
+    regionContainsPoint(botRegion, p)
+  )
+}
+
 // prettier-ignore
 export const verts2d: number[] = [
   0.5, -1.5,

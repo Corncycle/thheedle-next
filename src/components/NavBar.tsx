@@ -18,14 +18,12 @@ export default function NavBar() {
         'spacer',
         'About',
       ].map((s: string, i: number) => {
-        console.log(pathName)
         if (s === 'spacer') {
           return <NavSpacer key={i} />
         }
         const baseRoute = pathName.split('/')[1]
         const selected =
           baseRoute === s.toLowerCase() || (baseRoute === '' && s === 'Home')
-        console.log(selected)
         return (
           <NavItem
             isSelected={selected}
