@@ -53,7 +53,11 @@ table {
 
 /* utility */
 @layer components {
-	.text-glow {
+	.text-glow-white {
 		text-shadow: #FFF 1px 0 10px;
+	}
+
+	.text-glow-black {
+		text-shadow: #000 1px 0 15px;
 	}
 }

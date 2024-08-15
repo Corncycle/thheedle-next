@@ -30,7 +30,7 @@ export default function Home() {
       ></canvas>
       <div className="relative min-h-full w-full max-w-7xl flex flex-col gap-20 justify-center items-center md:items-end">
         <div className="absolute top-0 w-full h-4 bg-slate-600 md:hidden"></div>
-        <div className="relative md:mr-[10%]">
+        <div className="relative md:mr-[10%] z-10">
           <h1
             className={`${robotoThin.className} text-center text-white text-6xl md:text-8xl whitespace-nowrap`}
           >
@@ -44,7 +44,31 @@ export default function Home() {
             </strong>
           </h1>
         </div>
-        <NavBar></NavBar>
+        <div className="relative w-full">
+          <div
+            className="absolute w-full"
+            style={{
+              maskImage:
+                'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 25%, rgba(0,0,0,0.5) 75%, rgba(0,0,0,0) 100%)',
+              top: '-100%',
+              bottom: '-100%',
+            }}
+          >
+            <div
+              className="absolute inset-0"
+              style={{
+                maskImage:
+                  'linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 3%, rgba(0,0,0,1) 97%, rgba(0,0,0,0) 100%)',
+              }}
+            >
+              <div
+                className="absolute inset-0 bg-repeat"
+                style={{ backgroundImage: 'url(/dots2.png)' }}
+              ></div>
+            </div>
+          </div>
+          <NavBar></NavBar>
+        </div>
       </div>
     </>
   )

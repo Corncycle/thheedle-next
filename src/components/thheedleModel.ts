@@ -5,8 +5,8 @@ import {
   midRegion,
   regionContainsPoint,
   topRegion,
-  verts3d,
 } from './thheedleVertices'
+import { lerp } from 'three/src/math/MathUtils.js'
 
 const md = 768
 const lg = 1280
@@ -54,71 +54,102 @@ export const setupModel = () => {
   renderer.setSize(canvas.clientWidth, canvas.clientHeight)
   camera.position.z = 5
 
-  const geometry = new THREE.BufferGeometry()
-  const vertices = new Float32Array(verts3d)
-  geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3))
-  const material = new THREE.MeshBasicMaterial({
-    color: 0xdddddd,
-    // depthWrite: false,
-    transparent: true,
-    opacity: 0.3,
-    side: THREE.DoubleSide,
-  })
-  const mesh = new THREE.Mesh(geometry, material)
-  // scene.add(mesh)
   handleResize()
 
+  const clock = new THREE.Clock()
+  let t = 0
+  let velocity = 0
+  let maxVelocity = 1 / 4
+
   function animate() {
+    const delta = clock.getDelta()
+    t += delta
+
+    for (let i = 0; i < opacityMultipliers.length; i++) {
+      opacityMultipliers[i] =
+        0.5 * Math.cos(opacityPeriods[i] * t * 3 + 100) + 0.5
+    }
+    geometry2.attributes.opacityMultiplier.needsUpdate = true
+
+    if (currMouseX && currMouseY && !shouldDrift) {
+      points.rotation.y = lerp(points.rotation.y, currMouseX, 0.01)
+      points.rotation.x = lerp(points.rotation.x, currMouseY, 0.01)
+    }
+
+    if (shouldDrift) {
+      if (velocity < delta * maxVelocity) {
+        velocity += delta * (delta / 20)
+      }
+      velocity = Math.min(velocity, delta * maxVelocity)
+      points.rotation.y += velocity
+    }
+
+    if (points.rotation.y > Math.PI) {
+      points.rotation.y -= 2 * Math.PI
+    } else if (points.rotation.y < -Math.PI) {
+      points.rotation.y += 2 * Math.PI
+    }
+
+    // console.log(points.rotation.y)
+
     renderer.render(scene, camera)
   }
   renderer.setAnimationLoop(animate)
 
   window.addEventListener('resize', handleResize)
 
+  const initiateDrift = () => {
+    shouldDrift = true
+    velocity = 0
+  }
+
+  let currMouseX: number | undefined
+  let currMouseY: number | undefined
+
+  let shouldDrift: boolean = false
+  let timeout = setTimeout(initiateDrift, 2000)
+
   window.addEventListener('mousemove', (e) => {
     // normalize x and y between -1 and 1
     const nx = (2 * (e.x - window.innerWidth)) / window.innerWidth + 1
     const ny = (2 * (e.y - window.innerHeight)) / window.innerHeight + 1
 
-    // mesh.rotation.y = nx / 5
-    // mesh.rotation.x = ny / 5
+    currMouseX = nx / 3
+    currMouseY = ny / 3
 
-    // points.rotation.y = nx / 5
-    // points.rotation.x = ny / 5
-
-    mesh.rotation.y = nx
-    mesh.rotation.x = ny
-
-    points.rotation.y = nx / 3
-    points.rotation.x = ny / 3
+    shouldDrift = false
+    clearTimeout(timeout)
+    timeout = setTimeout(initiateDrift, 2000)
   })
 
   const vertices2: number[] = []
-  const labeledPoints: LabeledPoint[] = []
+  // const labeledPoints: LabeledPoint[] = []
 
-  for (let i = 0; i < 30000; i++) {
+  for (let i = 0; i < 12000; i++) {
     const x = THREE.MathUtils.randFloatSpread(1.5 * 2)
     const y = THREE.MathUtils.randFloatSpread(2 * 2)
     const z = THREE.MathUtils.randFloatSpread(1)
 
     if (regionContainsPoint(topRegion, { x, y })) {
-      labeledPoints.push({ x, y, z: z + 0.5, region: 'top' })
-      vertices2.push(x, y, z + 0.5)
+      // labeledPoints.push({ x, y, z, region: 'top' })
+      vertices2.push(x, y, z)
     } else if (regionContainsPoint(midRegion, { x, y })) {
-      labeledPoints.push({ x, y, z: z + 0.5, region: 'mid' })
-      vertices2.push(x, y, z + 0.5)
+      // labeledPoints.push({ x, y, z, region: 'mid' })
+      vertices2.push(x, y, z)
     } else if (regionContainsPoint(botRegion, { x, y })) {
-      labeledPoints.push({ x, y, z: z + 0.5, region: 'bot' })
-      vertices2.push(x, y, z + 0.5)
+      // labeledPoints.push({ x, y, z: z, region: 'bot' })
+      vertices2.push(x, y, z)
     }
   }
 
   const sizes = new Float32Array(vertices2.length / 3)
+  const opacityPeriods = new Float32Array(vertices2.length / 3)
+  const opacityMultipliers = new Float32Array(vertices2.length / 3)
 
-  console.log(`verts2: ${vertices2.length}`)
-  console.log(`siezs: ${sizes.length}, verts2 / 3: ${vertices2.length / 3}`)
   for (let i = 0; i < sizes.length; i++) {
-    sizes[i] = Math.random() * 2 + 0.5
+    sizes[i] = (Math.random() * 5 + 1) * devicePixelRatio
+    opacityPeriods[i] = i % 4 === 0 ? 0 : Math.random()
+    opacityMultipliers[i] = 2
   }
 
   const geometry2 = new THREE.BufferGeometry()
@@ -127,52 +158,38 @@ export const setupModel = () => {
     new THREE.Float32BufferAttribute(vertices2, 3)
   )
   geometry2.setAttribute('customScale', new THREE.BufferAttribute(sizes, 1))
+  geometry2.setAttribute(
+    'opacityMultiplier',
+    new THREE.BufferAttribute(opacityMultipliers, 1)
+  )
 
   const shaderMaterial = new THREE.ShaderMaterial({
     transparent: true,
     uniforms: {
       size: { value: 2 },
       scale: { value: 1 },
-      color: { value: new THREE.Color('red') },
     },
     vertexShader: `
       uniform float size;
-
       attribute float customScale;
-
-    	varying vec3 vColor;
+      attribute float opacityMultiplier;
+      varying float vMultiplier;
 
     	void main() {
-    		vColor = vec3(1.0);
+        vMultiplier = opacityMultiplier;
     		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
     		gl_PointSize = customScale;
     		gl_Position = projectionMatrix * mvPosition;
-
     	}
     `,
-    // fragmentShader: `
-    //   uniform vec3 color;
-
-    // 	varying vec3 vColor;
-
-    // 	void main() {
-
-    // 		gl_FragColor = vec4( color * vColor, 1.0 );
-
-    // 		gl_FragColor = gl_FragColor;
-
-    // 		if ( gl_FragColor.a < 0.1 ) discard;
-
-    // 	}
-    // `,
     fragmentShader: `
-      uniform vec3 color;
+      varying float vMultiplier;
+
       void main() {
         vec2 xy = gl_PointCoord.xy - vec2(0.5);
         float ll = length(xy);
-        gl_FragColor = vec4(xy, 0.5, step(ll, 0.5));
-
-        gl_FragColor = vec4(1.0, 1.0, 1.0, 0.7);
+        float opacity = step(ll, 0.55);
+        gl_FragColor = vec4(1.0, 1, 1, 0.5 * opacity * vMultiplier);
       }
     `,
   })
@@ -182,7 +199,7 @@ export const setupModel = () => {
   scene.add(points)
 
   canvas.classList.add('fadeIn')
-  console.log('Model should have been set up!')
+  console.log('Model should be set up!')
   threeReady = true
   handleResize()
 }

@@ -15,7 +15,7 @@ export default function NavItem({
       <Link
         className={`relative text-white ${
           isSelected ? 'underline' : 'no-underline'
-        } underline-offset-4 decoration-2 hover:text-glow`}
+        } underline-offset-4 decoration-2 text-glow-black hover:text-glow-white`}
         href={href}
       >
         {name}
