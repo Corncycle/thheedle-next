@@ -1,38 +1,33 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
-import NavItem from './NavItem'
-import NavSpacer from './NavSpacer'
+import NavBarContent from './NavBarContent'
 
 export default function NavBar() {
-  const pathName = usePathname()
-
   return (
-    <ul className="relative w-full h-8 justify-center items-center gap-4 hidden md:flex">
-      {[
-        'Home',
-        'spacer',
-        'Employees',
-        'spacer',
-        'Projects',
-        'spacer',
-        'About',
-      ].map((s: string, i: number) => {
-        if (s === 'spacer') {
-          return <NavSpacer key={i} />
-        }
-        const baseRoute = pathName.split('/')[1]
-        const selected =
-          baseRoute === s.toLowerCase() || (baseRoute === '' && s === 'Home')
-        return (
-          <NavItem
-            isSelected={selected}
-            name={s}
-            href={s === 'Home' ? '/' : `/${s.toLowerCase()}`}
-            key={i}
-          ></NavItem>
-        )
-      })}
-    </ul>
+    <div className="relative w-full">
+      <div
+        className="absolute w-full"
+        style={{
+          maskImage:
+            'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 25%, rgba(0,0,0,0.5) 75%, rgba(0,0,0,0) 100%)',
+          top: '-100%',
+          bottom: '-100%',
+        }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            maskImage:
+              'linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 3%, rgba(0,0,0,1) 97%, rgba(0,0,0,0) 100%)',
+          }}
+        >
+          <div
+            className="absolute inset-0 bg-repeat"
+            style={{ backgroundImage: 'url(/dots2.png)' }}
+          ></div>
+        </div>
+      </div>
+      <NavBarContent></NavBarContent>
+    </div>
   )
 }
