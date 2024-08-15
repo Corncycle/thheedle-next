@@ -15,7 +15,7 @@ jobs:
       - name: Set up node for building
         uses: actions/setup-node@v1
         with:
-          node-verison: 20
+          node-version: 20
       - name: Install dependencies
         run: npm ci
       - name: Build static site
