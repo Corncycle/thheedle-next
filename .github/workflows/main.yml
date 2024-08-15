@@ -1,4 +1,4 @@
-name: Upload Website
+name: Build and Upload Website
 
 on:
   push:
@@ -11,6 +11,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+
+      - name: Set up node for building
+        uses: actions/setup-node@v1
+        with:
+          node-verison: 20
+      - name: Install dependencies
+        run: npm ci
+      - name: Build static site
+        run: npm run build
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1

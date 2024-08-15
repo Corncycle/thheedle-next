@@ -7,7 +7,7 @@ export default function Home() {
       <div className={`text-white ${roboto.className}`}>
         <NavBar></NavBar>
         <div className="pt-12 text-xl text-center">
-          This page is under construction.
+          This page is under construction
         </div>
       </div>
     </div>
