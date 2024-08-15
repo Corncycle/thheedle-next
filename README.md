@@ -8,4 +8,4 @@ Run `npm run dev` to host the project on a local network and reload upon save.
 
 Run `npm run build` to build the project as a set of static files in `/out` which can be hosted with a basic web server (e.g. `serve out`).
 
-TODO: Set up deployment to S3 with Github workflows
+TODO: Test deployment to S3 with Github workflows
