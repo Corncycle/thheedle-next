@@ -4,7 +4,7 @@ import styles from './custom.module.css'
 
 import { useEffect, useState } from 'react'
 import { setupModel, threeReady } from '../components/thheedleModel'
-import { roboto, robotoHeavy, robotoThin } from './fonts'
+import { robotoHeavy, robotoThin } from './fonts'
 import NavBar from '@/components/NavBar'
 
 export default function Home() {
@@ -22,6 +22,7 @@ export default function Home() {
 
   return (
     <>
+      <title>thheedle</title>
       <canvas
         id="thheedle-model"
         className={`absolute left-0 pointer-events-none md:left-[-65%] ${
