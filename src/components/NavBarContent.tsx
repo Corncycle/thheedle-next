@@ -3,12 +3,22 @@
 import { usePathname } from 'next/navigation'
 import NavItem from './NavItem'
 import NavSpacer from './NavSpacer'
+import Link from 'next/link'
 
-export default function NavBarContent() {
+export default function NavBarContent({ showLogo }: { showLogo?: boolean }) {
   const pathName = usePathname()
 
   return (
     <ul className="relative w-full h-8 justify-center items-center gap-4 hidden md:flex">
+      {showLogo && (
+        <Link className="h-full" href="/">
+          <img
+            className="h-full drop-glow-black object-contain hover:drop-glow-white transition-all"
+            src="/512x512white.png"
+            alt="thheedle"
+          ></img>
+        </Link>
+      )}
       {[
         'Home',
         'spacer',

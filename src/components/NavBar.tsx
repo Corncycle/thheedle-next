@@ -2,7 +2,7 @@
 
 import NavBarContent from './NavBarContent'
 
-export default function NavBar() {
+export default function NavBar({ showLogo }: { showLogo?: boolean }) {
   return (
     <div className="relative w-full">
       <div
@@ -18,7 +18,7 @@ export default function NavBar() {
           className="absolute inset-0"
           style={{
             maskImage:
-              'linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 3%, rgba(0,0,0,1) 97%, rgba(0,0,0,0) 100%)',
+              'linear-gradient(to right, rgba(0,0,0,0) 7%, rgba(0,0,0,1) 10%, rgba(0,0,0,1) 90%, rgba(0,0,0,0) 93%)',
           }}
         >
           <div
@@ -27,7 +27,7 @@ export default function NavBar() {
           ></div>
         </div>
       </div>
-      <NavBarContent></NavBarContent>
+      <NavBarContent showLogo={showLogo}></NavBarContent>
     </div>
   )
 }

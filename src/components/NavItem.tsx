@@ -11,11 +11,11 @@ export default function NavItem({
   isSelected: boolean
 }) {
   return (
-    <li className={`${robotoHeavy.className} text-2xl text-white`}>
+    <li className={`${robotoHeavy.className} text-2xl text-white max-h-full`}>
       <Link
-        className={`relative text-white ${
+        className={`relative text-white inline-block ${
           isSelected ? 'underline' : 'no-underline'
-        } underline-offset-4 decoration-2 text-glow-black hover:text-glow-white`}
+        } underline-offset-4 decoration-2 text-glow-black hover:text-glow-white transition-all`}
         href={href}
       >
         {name}
