@@ -7,7 +7,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <body className="relative bg-black h-svh flex justify-center overflow-x-hidden">
+      <body className="relative bg-black h-svh flex flex-col items-center overflow-x-hidden">
         {children}
       </body>
     </html>
