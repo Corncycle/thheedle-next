@@ -7,10 +7,10 @@ export default function Home() {
     <>
       <title>thheedle - Employees</title>
       <MobileNavBar></MobileNavBar>
-      <div className="pt-8 w-full max-w-7xl mt-8">
+      <div className="md:pt-8 w-full max-w-7xl mt-8">
         <div className={`text-white ${roboto.className}`}>
           <NavBar showLogo={true}></NavBar>
-          <div className="pt-12 text-xl text-center">
+          <div className="md:pt-12 text-xl text-center">
             This page is under construction
           </div>
         </div>
